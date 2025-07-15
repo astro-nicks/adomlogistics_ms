@@ -11,6 +11,7 @@ import adomlogistics.service.DispatcherService;
 import adomlogistics.service.MaintenanceService;
 import adomlogistics.service.VehicleService;
 import adomlogistics.storage.Database;
+import adomlogistics.utils.QuickSortByMileage;
 
 import java.sql.SQLException;
 
@@ -170,7 +171,7 @@ public class Main {
             }
         }
     }
-
+// Modified this option
     private static void vehicleMenu() {
         while (true) {
             System.out.println("\n=== Vehicle Management ===");
@@ -178,7 +179,8 @@ public class Main {
             System.out.println("2. Search Vehicle");
             System.out.println("3. Remove Vehicle");
             System.out.println("4. List All Vehicles (by Mileage)");
-            System.out.println("5. Back to Main Menu");
+            System.out.println("5. Sort All Vehicles (by Mileage)");// Added this Option
+            System.out.println("6. Back to Main Menu");
             System.out.print("Select option: ");
 
             int choice = scanner.nextInt();
@@ -241,8 +243,16 @@ public class Main {
                     break;
 
                 case 5:
-                    return;
+                    vehicles = vehicleService.getVehiclesByMileage();
+                    QuickSortByMileage.quickSort(vehicles, 0, vehicles.length - 1);
 
+                    System.out.println("\nVehicles Sorted by Mileage:");
+                    for (Vehicle v : vehicles) {
+                        System.out.println(v.regNumber + " - Mileage: " + v.mileage + " km");
+                    }
+                    break;
+                case 6:
+                    return;
                 default:
                     System.out.println("Invalid choice!");
             }
