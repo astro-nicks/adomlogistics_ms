@@ -244,6 +244,10 @@ public class Main {
 
                 case 5:
                     vehicles = vehicleService.getVehiclesByMileage();
+                    if (vehicles.length == 0) {
+                        System.out.println("No vehicles available to sort.");
+                        break;
+                    }
                     QuickSortByMileage.quickSort(vehicles, 0, vehicles.length - 1);
 
                     System.out.println("\nVehicles Sorted by Mileage:");
