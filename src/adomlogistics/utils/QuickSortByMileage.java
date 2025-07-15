@@ -34,7 +34,7 @@ public class QuickSortByMileage {
         return i + 1; // Return the pivot index
     }
 
-    // Swap two trucks in the array
+    // Swap two vehicles in the array
     private static void swap(Vehicle[] vehicles, int i, int j) {
         Vehicle temp = vehicles[i];
         vehicles[i] = vehicles[j];
