@@ -7,15 +7,15 @@ import java.sql.*;
 import java.util.*;
 
 public class Database {
-    private static final String URL = "jdbc:mysql://localhost:3306/adom_logistics";
+    private static final String url = "jdbc:mysql://localhost:3306/adom_logistics";
     private static final String USER = "root";
-    private static final String PASSWORD = "ROOTm$Q723";
+    private static final String PASSWORD = "@chim0t@";
     private Connection connection;
 
     public Database() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            this.connection = DriverManager.getConnection(url, USER, PASSWORD);
             initializeDatabase();
         } catch (ClassNotFoundException e) {
             throw new SQLException("MySQL JDBC Driver not found", e);
