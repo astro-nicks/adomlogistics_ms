@@ -11,7 +11,9 @@ import adomlogistics.service.DispatcherService;
 import adomlogistics.service.MaintenanceService;
 import adomlogistics.service.VehicleService;
 import adomlogistics.storage.Database;
+import adomlogistics.utils.BinarySearchByRegNumber;
 import adomlogistics.utils.QuickSortByMileage;
+import adomlogistics.utils.QuickSortByRegNumber;
 
 import java.sql.SQLException;
 
@@ -179,8 +181,10 @@ public class Main {
             System.out.println("2. Search Vehicle");
             System.out.println("3. Remove Vehicle");
             System.out.println("4. List All Vehicles (by Mileage)");
-            System.out.println("5. Sort All Vehicles (by Mileage)");// Added this Option
-            System.out.println("6. Back to Main Menu");
+            System.out.println("5. Sort All Vehicles (by Mileage)");
+            System.out.println("6. Sort All Vehicles (by Registration Number)");//added this Option
+            System.out.println("7. Search Vehicle (Binary Search by RegNumber)");// Added this Option
+            System.out.println("8. Back to Main Menu");
             System.out.print("Select option: ");
 
             int choice = scanner.nextInt();
@@ -244,6 +248,10 @@ public class Main {
 
                 case 5:
                     vehicles = vehicleService.getVehiclesByMileage();
+                    if (vehicles.length == 0) {
+                        System.out.println("No vehicles available to sort.");
+                        break;
+                    }
                     QuickSortByMileage.quickSort(vehicles, 0, vehicles.length - 1);
 
                     System.out.println("\nVehicles Sorted by Mileage:");
@@ -252,6 +260,33 @@ public class Main {
                     }
                     break;
                 case 6:
+                    vehicles = vehicleService.getVehiclesByMileage();
+                    QuickSortByRegNumber.quickSort(vehicles, 0, vehicles.length - 1);
+                    System.out.println("\nVehicles Sorted by Registration Number:");
+                    for (Vehicle v : vehicles) {
+                        System.out.println(v.regNumber + " - " + v.name);
+                    }
+                    break;
+                case 7:
+                    vehicles = vehicleService.getVehiclesByMileage();  // Assuming this returns all vehicles
+
+                    // IMPORTANT: Sort first by regNumber before binary search
+                    QuickSortByRegNumber.quickSort(vehicles, 0, vehicles.length - 1);
+
+                    System.out.print("Enter Registration Number to search: ");
+                    String targetReg = scanner.nextLine();
+
+                    Vehicle result = BinarySearchByRegNumber.binarySearch(vehicles, targetReg);
+
+                    if (result != null) {
+                        System.out.println("\nVehicle Found:");
+                        System.out.println(result);
+                    } else {
+                        System.out.println("Vehicle not found!");
+                    }
+                    break;
+
+                case 8:
                     return;
                 default:
                     System.out.println("Invalid choice!");
