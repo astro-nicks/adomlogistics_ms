@@ -55,11 +55,36 @@ public class Main {
         }
     }
 
-    private static void loadSampleData() {
-        dispatcher.addDriver(new Driver(1, "John Doe", 5, 10.5f));
-        dispatcher.addDriver(new Driver(2, "Jane Smith", 3, 5.2f));
-        dispatcher.addDriver(new Driver(1, "John Doe", 5, 10.5f));
-        dispatcher.addDriver(new Driver(2, "Jane Smith", 3, 5.2f));
+  private static void loadSampleData() {
+    // Sample drivers for testing purposes
+    // Ensure drivers are added to both dispatcher and database 
+
+    
+    try {
+        if (!database.driverExists(1)) {
+            Driver d1 = new Driver(1, "John Doe", 5, 10.5);
+            dispatcher.addDriver(d1);
+            database.saveDriver(d1); // Save to Database
+        }
+
+        if (!database.driverExists(2)) {
+            Driver d2 = new Driver(2, "Jane Smith", 3, 5.2);
+            dispatcher.addDriver(d2);
+            database.saveDriver(d2);
+        }
+
+        if (!database.driverExists(3)) {
+            Driver d3 = new Driver(3, "Kofi Agyapong", 12, 1.0);
+            dispatcher.addDriver(d3);
+            database.saveDriver(d3);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+
+        // Sample vehicles and deliveries for testing purposes 
+        // Ensure vehicles are added to both vehicleService and deliveryService
 
         Vehicle vehicle1 = new Vehicle("VH1001", "Ford Transit", "Truck",
                 12.5f, 45000, null, "Oil change needed", "2023-01-15");
@@ -397,15 +422,13 @@ public class Main {
                             (vehicles.length > 0 ? totalMileage / vehicles.length : 0) + " km");
                     break;
 
-                case 3:
-                    System.out.println("\n=== Driver Performance ===");
-                    Driver[] drivers = dispatcher.getAllDrivers();
-                    for (Driver d : drivers) {
-                        int deliveries = dispatcher.getDriverRoutes(d.id).length;
-                        System.out.println(d.name + " (" + d.experienceYears + " yrs) | " +
-                                "Deliveries: " + deliveries);
-                    }
-                    break;
+               case 3:
+                            System.out.println("\n=== Driver Performance ===");
+                            Driver[] drivers = dispatcher.getAllDrivers();
+                            for (Driver d : drivers) {
+                                System.out.println(dispatcher.getDriverPerformance(d.id));
+                            }
+                            break;
 
                 case 4:
                     System.out.println("\n=== Maintenance History ===");

@@ -7,9 +7,9 @@ import java.sql.*;
 import java.util.*;
 
 public class Database {
-    private static final String url = "jdbc:mysql://localhost:3306/adom_logistics";
+    private static final String url = "jdbc:mysql://localhost:3306/adom_logistics"; 
     private static final String USER = "root";
-    private static final String PASSWORD = "@chim0t@";
+    private static final String PASSWORD = "Flight$23";
     private Connection connection;
 
     public Database() throws SQLException {
@@ -57,6 +57,21 @@ public class Database {
         }
     }
 
+    // Save a driver to the database
+    public boolean driverExists(int id) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM drivers WHERE id = ?"; // Check if driver exists and return count
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+    }
+    return false;
+}
+
+
     public void saveVehicle(Vehicle vehicle) throws SQLException {
         String sql = "INSERT INTO vehicles VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE " +
@@ -76,6 +91,27 @@ public class Database {
             stmt.executeUpdate();
         }
     }
+
+    
+    public void saveDriver(adomlogistics.model.Driver driver) throws SQLException {
+        //  Check if driver already exists and skip if it does
+        // We used ON DUPLICATE KEY UPDATE to handle updates and insertions in one query
+    String sql = "INSERT INTO drivers (id, name, experience_years, distance_from_pickup, available) " +
+                 "VALUES (?, ?, ?, ?, ?) " +
+                 "ON DUPLICATE KEY UPDATE name=VALUES(name), experience_years=VALUES(experience_years), " +
+                 "distance_from_pickup=VALUES(distance_from_pickup), available=VALUES(available)";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, driver.id); 
+        stmt.setString(2, driver.name);
+        stmt.setInt(3, driver.experienceYears);
+        stmt.setDouble(4, driver.distanceFromPickup);
+        stmt.setBoolean(5, driver.available);
+        stmt.executeUpdate();
+    }
+
+    
+}
+
 
     public List<Vehicle> loadAllVehicles() throws SQLException {
         List<Vehicle> vehicles = new ArrayList<>();
