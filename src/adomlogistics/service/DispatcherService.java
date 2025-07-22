@@ -59,9 +59,15 @@ public class DispatcherService {
         return driverRoutes.get(driverId);
     }
 
-    public Driver[] getAllDrivers() {
-        return driverMap.values();
+public Driver[] getAllDrivers() {
+    Object[] raw = driverMap.values(); // Object[]
+    Driver[] drivers = new Driver[raw.length];
+    for (int i = 0; i < raw.length; i++) {
+        drivers[i] = (Driver) raw[i]; // Safe cast
     }
+    return drivers;
+}
+
 
     public void addRouteToDriver(int driverId, Route route) {
         Route[] currentRoutes = driverRoutes.get(driverId);

@@ -7,9 +7,9 @@ import java.sql.*;
 import java.util.*;
 
 public class Database {
-    private static final String URL = "jdbc:mysql://localhost:3306/adom_logistics";
+    private static final String URL = "jdbc:mysql://localhost:3306/adomlogistics_db";
     private static final String USER = "root";
-    private static final String PASSWORD = "ROOTm$Q723";
+    private static final String PASSWORD = "Flight$23";
     private Connection connection;
 
     public Database() throws SQLException {
