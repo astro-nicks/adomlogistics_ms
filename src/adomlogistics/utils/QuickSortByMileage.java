@@ -22,8 +22,7 @@ public class QuickSortByMileage {
 
         // Loop through from start to end - 1
         for (int j = start; j < end; j++) {
-            if (vehicles[j].mileage < pivot.mileage)
-    {
+            if (vehicles[j].mileage < pivot.mileage) {
                 i++; // Increment smaller element index
                 swap(vehicles, i, j); // Swap vehicles[i] and vehicles[j]
             }
