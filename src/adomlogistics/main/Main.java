@@ -57,9 +57,9 @@ public class Main {
 
   private static void loadSampleData() {
     // Sample drivers for testing purposes
-    // Ensure drivers are added to both dispatcher and database 
+    // Ensure drivers are added to both dispatcher and database
 
-    
+
     try {
         if (!database.driverExists(1)) {
             Driver d1 = new Driver(1, "John Doe", 5, 10.5);
@@ -83,7 +83,7 @@ public class Main {
     }
 
 
-        // Sample vehicles and deliveries for testing purposes 
+        // Sample vehicles and deliveries for testing purposes
         // Ensure vehicles are added to both vehicleService and deliveryService
 
         Vehicle vehicle1 = new Vehicle("VH1001", "Ford Transit", "Truck",
@@ -92,7 +92,7 @@ public class Main {
                 10.2f, 32000, null, "Good condition", "2023-03-20");
 
         try {
-            vehicleService.addVehicle(vehicle1);
+            vehicleService.addVehicle(vehicle1); //Explains why the database doesn't show any data on vehicle additions;No sql backing
             vehicleService.addVehicle(vehicle2);
         } catch (Exception e) {
             System.err.println("Error saving vehicles: " + e.getMessage());
@@ -166,33 +166,33 @@ public class Main {
                     break;
 
                 case 2:
-                    deliveryService.assignNextDelivery();
+                    deliveryService.assignNextDelivery();       //Suspicion of no sql backing; doesn't work
                     System.out.println("Delivery assigned to driver/vehicle");
                     break;
 
                 case 3:
                     System.out.print("Enter Package ID to complete: ");
                     String completeId = scanner.nextLine();
-                    deliveryService.markAsDelivered(completeId);
+                    deliveryService.markAsDelivered(completeId);    //nothing marked
                     System.out.println("Delivery marked as completed");
                     break;
 
                 case 4:
                     System.out.println("\nPending Deliveries:");
-                    for (Delivery d : deliveryService.getPendingDeliveries()) {
+                    for (Delivery d : deliveryService.getPendingDeliveries()) { //Won't fetch any data
                         System.out.println(d);
                     }
                     break;
 
                 case 5:
                     System.out.println("\nActive Deliveries:");
-                    for (Delivery d : deliveryService.getActiveDeliveries()) {
+                    for (Delivery d : deliveryService.getActiveDeliveries()) {  //Won't fetch any data as well
                         System.out.println(d);
                     }
                     break;
 
                 case 6: return;
-                default: System.out.println("Invalid choice!");
+                default: System.out.println("Invalid choice!");     //Total number of inactive methods is 4
             }
         }
     }
@@ -227,11 +227,12 @@ public class Main {
 
                     Vehicle newVehicle = new Vehicle(regNum, name, type, fuelUsage,
                             mileage, null, history, lastService);
+                    //Could we write a corresponding database query that handles the implementation of the method addVehicle?
                     vehicleService.addVehicle(newVehicle);
                     deliveryService.addVehicle(newVehicle);
 
                     if (history.contains("critical") || mileage > 50000) {
-                        maintenanceService.scheduleMaintenance(newVehicle);
+                        maintenanceService.scheduleMaintenance(newVehicle);     //Real cap...ain't shit working here
                     }
                     System.out.println("Vehicle added!");
                     break;
@@ -239,7 +240,8 @@ public class Main {
                 case 2:
                     System.out.print("Enter Registration Number: ");
                     String searchReg = scanner.nextLine();
-                    Vehicle found = vehicleService.searchVehicle(searchReg);
+                    //There does not seem to be any database query that handles the implementation of this method
+                    Vehicle found = vehicleService.searchVehicle(searchReg);        //Naaa...nothing to be seen in db
                     if (found != null) {
                         System.out.println("\nVehicle Found:");
                         System.out.println(found);
@@ -251,7 +253,7 @@ public class Main {
                 case 3:
                     System.out.print("Enter Registration Number to remove: ");
                     String removeReg = scanner.nextLine();
-                    vehicleService.removeVehicle(removeReg);
+                    vehicleService.removeVehicle(removeReg);        //Doesn't do so either
                     System.out.println("Vehicle removed (if existed)");
                     break;
 
@@ -288,14 +290,14 @@ public class Main {
                     float distance = readFloat("Distance from Pickup (km): ");
                     scanner.nextLine();
 
-                    int newId = dispatcher.getDriverCount() + 1;
+                    int newId = dispatcher.getDriverCount() + 1;        //Nope...don't see it
                     dispatcher.addDriver(new Driver(newId, name, exp, distance));
                     System.out.println("Driver added with ID: " + newId);
                     break;
 
                 case 2:
                     System.out.println("\nAvailable Drivers:");
-                    Driver[] available = dispatcher.getAvailableDrivers();
+                    Driver[] available = dispatcher.getAvailableDrivers();      //Quite sure it doesn't work
                     for (Driver d : available) {
                         System.out.println(d);
                     }
@@ -304,7 +306,7 @@ public class Main {
                 case 3:
                     int id = readInt("Enter Driver ID: ");
                     scanner.nextLine();
-                    Driver driver = dispatcher.getDriver(id);
+                    Driver driver = dispatcher.getDriver(id);   //Naaa...these bugs finna kill me
                     if (driver != null) {
                         System.out.println("\nDriver Details:");
                         System.out.println(driver);
@@ -337,7 +339,7 @@ public class Main {
                     System.out.println("\nMaintenance Queue (by Urgency):");
                     Vehicle[] maintenanceQueue = maintenanceService.getMaintenanceQueue();
                     for (Vehicle v : maintenanceQueue) {
-                        int urgency = maintenanceService.calculateUrgency(v);
+                        int urgency = maintenanceService.calculateUrgency(v);       //Man I ain't gon' lie shit ain't workin' around here
                         System.out.println(v.regNumber + " - " + v.name +
                                 " | Urgency: " + urgency +
                                 " | Last Service: " + v.lastServiceDate);
@@ -345,7 +347,7 @@ public class Main {
                     break;
 
                 case 2:
-                    Vehicle nextVehicle = maintenanceService.getNextMaintenance();
+                    Vehicle nextVehicle = maintenanceService.getNextMaintenance();      //Damn....dummy codes all through
                     if (nextVehicle != null) {
                         System.out.println("\nProcessing maintenance for:");
                         System.out.println(nextVehicle);
@@ -367,9 +369,9 @@ public class Main {
                 case 3:
                     System.out.print("Enter Vehicle Registration: ");
                     String regNum = scanner.nextLine();
-                    Vehicle vehicle = vehicleService.searchVehicle(regNum);
+                    Vehicle vehicle = vehicleService.searchVehicle(regNum);     //Naaa..
                     if (vehicle != null) {
-                        maintenanceService.scheduleMaintenance(vehicle);
+                        maintenanceService.scheduleMaintenance(vehicle);        //Hmmm....
                         System.out.println("Maintenance scheduled for " + regNum);
                     } else {
                         System.out.println("Vehicle not found!");
@@ -426,7 +428,7 @@ public class Main {
                             System.out.println("\n=== Driver Performance ===");
                             Driver[] drivers = dispatcher.getAllDrivers();
                             for (Driver d : drivers) {
-                                System.out.println(dispatcher.getDriverPerformance(d.id));
+                                System.out.println(dispatcher.getDriverPerformance(d.id));          //Shiiiittt.....I ain't even mad no more
                             }
                             break;
 
@@ -462,7 +464,8 @@ public class Main {
                     System.out.print("\n Do you want to save all fleet, delivery, driver, and maintenance data? (y/n)?");
                     String confirm = scanner.nextLine().trim().toLowerCase();
                     if (confirm.equals("y")) {
-                        FileSaverService.dumpSystemState(drivers, vehicles, deliveries, maintenanceRecords);
+                        //May need to perform a method call that saves everything specifically to the database
+                        FileSaverService.dumpSystemState(drivers, vehicles, deliveries, maintenanceRecords); //working
                         System.out.println("System state successfully saved.");
                     } else {
                         System.out.println("Operation cancelled.");

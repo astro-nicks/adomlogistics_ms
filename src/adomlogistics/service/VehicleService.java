@@ -35,6 +35,7 @@ public class VehicleService {
     }
 
     public Vehicle searchVehicle(String regNumber) {
+
         return vehicleMap.get(regNumber);
     }
 
