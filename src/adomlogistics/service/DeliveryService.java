@@ -85,7 +85,16 @@ public class DeliveryService {
     }
 
     public Delivery[] getActiveDeliveries() {
-        return activeDeliveries.values();
+        Object[] raw = activeDeliveries.values();
+        Delivery[] deliveries = new Delivery[raw.length];
+        for (int i = 0; i < raw.length; i++) {
+            if (raw[i] instanceof Delivery) {
+                deliveries[i] = (Delivery) raw[i];
+            } else {
+                deliveries[i] = null; 
+            }
+        }
+        return deliveries;
     }
 
     public void addVehicle(Vehicle vehicle) {

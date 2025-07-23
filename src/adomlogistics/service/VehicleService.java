@@ -55,7 +55,15 @@ public class VehicleService {
         // Note: BST update would require removal and reinsertion
     }
 
-    public Vehicle[] getAllVehicles() {
-        return vehicleMap.values();
+   public Vehicle[] getAllVehicles() {
+    Object[] raw = vehicleMap.values();  // returns Object[]
+    Vehicle[] vehicles = new Vehicle[raw.length];
+
+    for (int i = 0; i < raw.length; i++) {
+        vehicles[i] = (Vehicle) raw[i];  // safe cast element-by-element
     }
+
+    return vehicles;
+}
+
 }
